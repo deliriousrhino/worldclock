@@ -5,38 +5,31 @@
  var zoneNames;
  var zoneWidth = 3552;
  var totalHours = 37;
- var minLength =96/60; // px length of a min;
+ var minLength = 96 / 60; // px length of a min;
  var comparetimeZones = [{
      name: 'Vancouver',
-     zone: 'America/Vancouver',
-     times: []
+     zone: 'America/Vancouver'
  }, {
      name: 'LA',
-     zone: 'America/Los_Angeles',
-     times: []
+     zone: 'America/Los_Angeles'
  }, {
      name: 'New York',
-     zone: 'America/New_York',
-     times: []
+     zone: 'America/New_York'
  }, {
      name: 'Tokyo',
-     zone: 'Asia/Tokyo',
-     times: []
+     zone: 'Asia/Tokyo'
  }, {
      name: 'London',
-     zone: 'Europe/London',
-     times: []
+     zone: 'Europe/London'
  }, {
      name: 'Rome',
-     zone: 'Europe/Rome',
-     times: []
+     zone: 'Europe/Rome'
  }];
-
-
+ // moment.tz.names()
+ var userTimezone = moment.tz.guess();
  var yourTimeZome = {
-     name: 'Sydney',
-     zone: 'Australia/Sydney',
-     times: []
+     name: userTimezone.split('/')[1].replace(/_/g,' '),
+     zone: userTimezone
  }
 
  var colours = ['60,200,200', '200,60,200', '200,200,60']
@@ -96,26 +89,26 @@
      var times = document.getElementById('times');
      var dom = buildYourTime();
      dom += buildComparisons();
-     dom +='<div class="edit-button"></div>';
+     dom += '<a class="edit-button" href="javascript:openPicker()"></a>';
+     dom += '<a id="mask" class="mask" href="javascript:closePicker()"></a>';
+      dom += '<div id="picker" class="picker"></div>';
      times.innerHTML = dom;
      yourTime = document.getElementsByClassName('times')[0];
      zoneNames = document.getElementsByClassName('zone-name');
-    
-     setTimeout(scrollToNow,100);
+
+     setTimeout(scrollToNow, 100);
  }
 
- function scrollToNow(){
-   
-    var time = moment();
-    var totalMins = ((time.hours())*60)+time.minutes();
-    console.log('time.hours()', time.hours())
-    console.log('totalMins',totalMins)
-     var halfWidth = window.innerWidth / 2;
-    var scrollPos = (6*60*minLength + (totalMins*minLength))- halfWidth
-    window.scrollTo(Math.round(scrollPos),0);
+ function scrollToNow() {
 
-   updateScroll();
-   // window.addEventListener('scroll', scroll);
+     var time = moment();
+     var totalMins = ((time.hours()) * 60) + time.minutes();
+     var halfWidth = window.innerWidth / 2;
+     var scrollPos = (6 * 60 * minLength + (totalMins * minLength)) - halfWidth
+     window.scrollTo(Math.round(scrollPos), 0);
+
+     scroll();
+     window.addEventListener('scroll', scroll);
  }
 
  function scroll() {
@@ -130,7 +123,7 @@
 
  function scrollStart() {
      scrollStarted = true;
-     scrollInterval = window.requestAnimationFrame(updateScroll)
+     scrollInterval = window.requestAnimationFrame(updateScroll);
  }
 
  function updateScroll() {
@@ -139,7 +132,6 @@
          var zoneName = zoneNames[i]
          zoneName.style.transform = 'translate(0,-' + window.scrollY + 'px)';
      };
-     scrollInterval = window.requestAnimationFrame(updateScroll)
      updateTimes();
  }
 
@@ -158,13 +150,25 @@
          var timeStr = time.tz(timeZone.zone).format('h:mm a');
          zomeNameDom.innerHTML = '<span class="name">' + timeZone.name + '</span><span class="time-str">' + timeStr + '</span>';
      };
+     window.cancelAnimationFrame(scrollInterval);
+     scrollInterval = window.requestAnimationFrame(updateScroll);
  }
 
  function scrollEnd() {
      scrollStarted = false;
-     if (scrollInterval) {
-         window.cancelAnimationFrame(scrollInterval)
-     }
+     window.cancelAnimationFrame(scrollInterval);
+ }
+function openPicker(){
+    var picker = document.getElementById('picker');
+    picker.className = picker.className + " picker-open";
+    var mask = document.getElementById('mask');
+       mask.className = mask.className + " mask-open";
+ }
+ function closePicker(){
+    var picker = document.getElementById('picker');
+    picker.className = "picker";
+       var mask = document.getElementById('mask');
+       mask.className = "mask";
  }
 
  init();
