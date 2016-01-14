@@ -7,7 +7,9 @@
  var totalHours = 37;
  var minLength = timeWidth / 60; // px length of a min;
  var zoneWidth = timeWidth * totalHours;
- var isPickerOpen = false;
+ var isSettingsOpen = false;
+
+
 
  var comparetimeZones = [{
      name: 'Vancouver',
@@ -28,7 +30,7 @@
      name: 'Rome',
      zone: 'Europe/Rome'
  }];
- // moment.tz.names()
+
  var userTimezone = moment.tz.guess();
  var yourTimeZome = {
      name: userTimezone.split('/')[1].replace(/_/g, ' '),
@@ -92,14 +94,18 @@
      var times = document.getElementById('times');
      var dom = buildYourTime();
      dom += buildComparisons();
-     dom += '<a id="edit-button" class="edit-button" href="javascript:togglePicker()"></a>';
-     dom += '<a id="mask" class="mask" href="javascript:closePicker()"></a>';
-     dom += '<div id="picker" class="picker"><input type="search"></input><ul id="zone-list" class="zone-list"><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li></ul></div>';
+     
+     dom += '<a id="edit-button" class="edit-button" href="javascript:toggleSettings()"></a>';
+     dom += '<a id="mask" class="mask" href="javascript:closeSettings()"></a>';
+     dom += '<div id="settings" class="settings"><div id="your-location" class="your-location"><h5>Your Location</h5><h2>Sydney</h2></div><ul id="zone-list" class="zone-list"><li><a>Sydney Australia</a></li></ul><a id="add-button" class="add-button" href="javascript:openSearch()"><span>Add Location</span></a></div>'
+    
+     //dom += '<div id="picker" class="picker"></div>';
      times.innerHTML = dom;
      yourTime = document.getElementsByClassName('times')[0];
      zoneNames = document.getElementsByClassName('zone-name');
 
      setTimeout(scrollToNow, 100);
+     LoctionSearch.init();
  }
 
  function scrollToNow() {
@@ -161,36 +167,51 @@
      scrollStarted = false;
      window.cancelAnimationFrame(scrollInterval);
  }
-function togglePicker(){
-    if (isPickerOpen){
-        closePicker()
-    } else {
-        openPicker();
-    }
 
-}
- function openPicker() {
-    isPickerOpen = true;
+ function toggleSettings() {
+     if (isSettingsOpen) {
+         closeSettings()
+     } else {
+         openSettings();
+     }
+
+ }
+
+ function openSettings() {
+     isSettingsOpen = true;
      var body = document.getElementsByTagName("body")[0];
      body.className = "no-scroll"
-     var picker = document.getElementById('picker');
-     picker.className = picker.className + " picker-open";
+     var settings = document.getElementById('settings');
+     settings.className = settings.className + " settings-open";
      var mask = document.getElementById('mask');
      mask.className = mask.className + " mask-open";
      var editButton = document.getElementById('edit-button');
      editButton.className = editButton.className + " close";
  }
 
- function closePicker() {
-    isPickerOpen = false;
-     var picker = document.getElementById('picker');
-     picker.className = "picker";
+ function openSearch() {
+     var settings = document.getElementById('settings');
+     settings.className = settings.className + " settings-close";
+     LoctionSearch.open();
+ }
+
+ function closeSearch(){
+     var settings = document.getElementById('settings');
+     settings.className = "settings settings-open";
+      LoctionSearch.close();
+ }
+
+ function closeSettings() {
+     isSettingsOpen = false;
+     var settings = document.getElementById('settings');
+     settings.className = "settings";
      var mask = document.getElementById('mask');
      mask.className = "mask";
      var body = document.getElementsByTagName("body")[0];
      body.className = ""
-      var editButton = document.getElementById('edit-button');
+     var editButton = document.getElementById('edit-button');
      editButton.className = "edit-button";
+       LoctionSearch.close();
  }
 
  init();
