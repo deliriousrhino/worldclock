@@ -226,6 +226,36 @@ h5 {
     border-bottom: 1px solid #ccc;
 }
 
+.your-location::after {
+    content: '';
+    width: 4px;
+    height: 25px;
+    border-top: 3px solid #000;
+    border-bottom: 20px solid #000;
+    display: block;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 19px;
+    right: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+.your-location::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 39px;
+    right: 20px;
+    transition: all 0.3s ease-in-out;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 3px 3px 0;
+    /* transform: rotate(-45deg); */
+    border-color: transparent transparent transparent #000;
+}
+
+
 .your-location h5 {
     font-weight: normal;
 }
@@ -359,11 +389,19 @@ input {
     height: calc(100% - 110px);
     background: #CC006C;
 }
-
+.search-list {
+    margin: 0;
+    padding: 0;
+    color: #000;
+    overflow: scroll;
+    height: calc(100% - 40px);
+    background: #CC006C;
+}
+.search-list li,
 .zone-list li {
     list-style-type: none;
 }
-
+.search-list li a,
 .zone-list li a {
     display: block;
     padding: 8px;
@@ -371,4 +409,16 @@ input {
     color: rgba(255, 255, 255, 0.9);
     /* font-weight: bolder; */
     font-size: 18px;
+    position: relative;
+    text-decoration: none;
+}
+.zone-list li a:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    right: 6px;
+    top: 16px;
+    width: 16px;
+    height: 2px;
+    background: #fff;
 }
