@@ -6,7 +6,7 @@ var Settings = {
         div.setAttribute('id', 'settings');
         div.setAttribute('class', 'settings');
         // create inner dom
-        var dom = '<div class="your-location"><h5>Your Location</h5><h2>Sydney</h2></div><ul id="zone-list" class="zone-list"></ul><a id="add-button" class="add-button" href="javascript:openSearch()"><span>Add Location</span></a>';
+        var dom = '<a href="javascript:editYourLocation()" class="your-location"><h5>Your Location</h5><h2>Sydney</h2></a><ul id="zone-list" class="zone-list"></ul><a id="add-button" class="add-button" href="javascript:openSearch()"><span>Add Location</span></a>';
         div.innerHTML = dom;
         // add 
         parentNode.appendChild(div);

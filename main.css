@@ -224,6 +224,8 @@ h5 {
     color: #000;
     padding: 8px;
     border-bottom: 1px solid #ccc;
+    display: block;
+    text-decoration: none;
 }
 
 .your-location::after {

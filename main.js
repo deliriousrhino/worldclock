@@ -10,17 +10,25 @@
  var isSettingsOpen = false;
 
 
+ var comparetimeZones = JSON.parse(localStorage.getItem("comparetimeZones"));
+ if (!comparetimeZones) {
+     comparetimeZones = [{
+         name: 'Vancouver',
+         zone: 'America/Vancouver'
+     }];
+ }
 
- var comparetimeZones = [{
-     name: 'Vancouver',
-     zone: 'America/Vancouver'
- }];
 
  var userTimezone = moment.tz.guess();
- var yourTimeZome = {
-     name: userTimezone.split('/')[1].replace(/_/g, ' '),
-     zone: userTimezone
+
+ var yourTimeZome = JSON.parse(localStorage.getItem("yourTimeZome"));
+ if (!yourTimeZome) {
+     yourTimeZome = {
+         name: userTimezone.split('/')[1].replace(/_/g, ' '),
+         zone: userTimezone
+     }
  }
+
 
  var colours = ['60,200,200', '200,60,200', '200,200,60']
 
@@ -29,6 +37,7 @@
 
 
  function buildTimeRow(timeZone) {
+    console.log(timeZone)
      var dom = ''
      dom += '<div class="zone-name" id="' + timeZone.zone.split('/').join('-') + '"></div>';
      dom += '<div class="zone" style="width:' + zoneWidth + '">';
@@ -88,7 +97,9 @@
          name: name,
          zone: zone
      };
-     var zonesList = comparetimeZones.map(function(zoneObj){return zoneObj.zone})
+     var zonesList = comparetimeZones.map(function(zoneObj) {
+         return zoneObj.zone
+     })
      if (zonesList.indexOf(zone) === -1 && yourTimeZome.zone !== zone) {
          comparetimeZones.push(zoneObj);
          updateComparisons();
@@ -96,7 +107,7 @@
          Settings.updateList();
      }
      closeSearch();
-
+     save();
  }
 
  function removeLocation(zone) {
@@ -115,6 +126,7 @@
      updateComparisons();
      updateTimes();
      Settings.updateList();
+     save()
  }
 
  function updateComparisons() {
@@ -221,6 +233,11 @@
      LoctionSearch.open();
  }
 
+ function editYourLocation() {
+     Settings.off();
+     LoctionSearch.open();
+ }
+
  function closeSearch() {
      Settings.open();
      LoctionSearch.close();
@@ -233,6 +250,11 @@
      var editButton = document.getElementById('edit-button');
      editButton.className = "edit-button";
      LoctionSearch.close();
+ }
+
+ function save() {
+     localStorage.setItem('yourTimeZome', JSON.stringify(yourTimeZome));
+     localStorage.setItem('comparetimeZones', JSON.stringify(comparetimeZones));
  }
 
  init();
