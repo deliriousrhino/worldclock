@@ -8,6 +8,8 @@
  var minLength = timeWidth / 60; // px length of a min;
  var zoneWidth = timeWidth * totalHours;
  var isSettingsOpen = false;
+ var addingLocation = true;
+
 
 
  var comparetimeZones = JSON.parse(localStorage.getItem("comparetimeZones"));
@@ -22,13 +24,13 @@
  var userTimezone = moment.tz.guess();
 
  var yourTimeZome = JSON.parse(localStorage.getItem("yourTimeZome"));
+ console.log('yourTimeZome', yourTimeZome, localStorage.getItem("yourTimeZome"))
  if (!yourTimeZome) {
      yourTimeZome = {
          name: userTimezone.split('/')[1].replace(/_/g, ' '),
          zone: userTimezone
      }
  }
-
 
  var colours = ['60,200,200', '200,60,200', '200,200,60']
 
@@ -37,7 +39,6 @@
 
 
  function buildTimeRow(timeZone) {
-    console.log(timeZone)
      var dom = ''
      dom += '<div class="zone-name" id="' + timeZone.zone.split('/').join('-') + '"></div>';
      dom += '<div class="zone" style="width:' + zoneWidth + '">';
@@ -72,6 +73,12 @@
      return dom;
  }
 
+ function updateYourTime() {
+     var dom = buildTimeRow(yourTimeZome);
+     var yourTime = document.getElementsByClassName('your-time')[0];
+     yourTime.innerHTML = dom;
+ }
+
  function buildComparisons() {
      var dom = '<div id="comparisons" class="comparisons">';
      dom += buildComparisonsRows();
@@ -88,19 +95,44 @@
      return dom;
  }
 
- function addLocation(zone) {
-     var name = zone;
-     if (name.indexOf('/') !== -1) {
-         name = zone.split('/')[1].split('_').join(' ');
+ function locationSelected(locationIndex) {
+     var location;
+     for (var i = cities.length - 1; i >= 0; i--) {
+         if (cities[i].id === Number(locationIndex)) {
+             location = cities[i];
+             break;
+         }
+     };
+     if (addingLocation) {
+         addLocation(location);
+     } else {
+         changeYourLocation(location)
      }
+ }
+
+ function changeYourLocation(location) {
+
+     yourTimeZome = {
+         name: location.name,
+         zone: location.zoneName
+     }
+     updateYourTime();
+     updateTimes();
+     closeSearch();
+     Settings.updateYourLocation(yourTimeZome.name);
+     yourTime = document.getElementsByClassName('times')[0];
+     save();
+ }
+
+ function addLocation(location) {
      var zoneObj = {
-         name: name,
-         zone: zone
+         name: location.name,
+         zone: location.zoneName
      };
      var zonesList = comparetimeZones.map(function(zoneObj) {
          return zoneObj.zone
      })
-     if (zonesList.indexOf(zone) === -1 && yourTimeZome.zone !== zone) {
+     if (zonesList.indexOf(location.zoneName) === -1 && yourTimeZome.zone !== location.zoneName) {
          comparetimeZones.push(zoneObj);
          updateComparisons();
          updateTimes();
@@ -149,6 +181,7 @@
      Mask.init(times);
      Settings.init(times);
      LoctionSearch.init(times);
+     Settings.updateYourLocation(yourTimeZome.name);
  }
 
  function scrollToNow() {
@@ -229,11 +262,13 @@
  }
 
  function openSearch() {
+     addingLocation = true;
      Settings.off();
      LoctionSearch.open();
  }
 
  function editYourLocation() {
+     addingLocation = false;
      Settings.off();
      LoctionSearch.open();
  }
@@ -255,6 +290,11 @@
  function save() {
      localStorage.setItem('yourTimeZome', JSON.stringify(yourTimeZome));
      localStorage.setItem('comparetimeZones', JSON.stringify(comparetimeZones));
+ }
+
+ function clearSavedData() {
+     localStorage.setItem('yourTimeZome', null);
+     localStorage.setItem('comparetimeZones', null);
  }
 
  init();

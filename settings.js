@@ -6,12 +6,18 @@ var Settings = {
         div.setAttribute('id', 'settings');
         div.setAttribute('class', 'settings');
         // create inner dom
-        var dom = '<a href="javascript:editYourLocation()" class="your-location"><h5>Your Location</h5><h2>Sydney</h2></a><ul id="zone-list" class="zone-list"></ul><a id="add-button" class="add-button" href="javascript:openSearch()"><span>Add Location</span></a>';
+        var dom = '<a href="javascript:editYourLocation()" class="your-location"></a><ul id="zone-list" class="zone-list"></ul><a id="add-button" class="add-button" href="javascript:openSearch()"><span>Add Location</span></a>';
         div.innerHTML = dom;
         // add 
         parentNode.appendChild(div);
         this.element = document.getElementById('settings');
         this.updateList();
+    },
+
+    updateYourLocation: function(name){
+        var dom = '<h5>Your Location</h5><h2>'+name+'</h2>';
+        var yourLocation = document.getElementsByClassName('your-location')[0];
+        yourLocation.innerHTML = dom;
     },
 
     updateList: function() {

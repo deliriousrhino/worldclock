@@ -1,6 +1,7 @@
 var LoctionSearch = {
-
+    lastSearchStr: null,
     element: null,
+    filteredList: null,
     init: function(parentNode) {
 
         var div = document.createElement('div');
@@ -16,9 +17,11 @@ var LoctionSearch = {
     },
 
     open: function() {
+        this.buildList('');
         this.element.className = this.element.className + " location-search-open";
     },
     close: function() {
+        this.searchInput.value = '';
         this.element.className = "location-search";
     },
     search: function() {
@@ -26,25 +29,28 @@ var LoctionSearch = {
     },
     buildList: function(searchStr) {
         searchStr = searchStr.toLowerCase();
-        var locationNames = moment.tz.names();
-        var filteredList;
+        //var locationNames = moment.tz.names();
+        // cities-list.js
         if (!searchStr || searchStr === '') {
-            filteredList = locationNames;
+            this.filteredList = cities;
         } else {
-            filteredList = locationNames.filter(function(location) {
-                if (location.split('_').join(' ').toLowerCase().indexOf(searchStr) !== -1) {
+            var listToFliter = cities;
+            if (this.lastSearchStr && searchStr.indexOf(this.lastSearchStr)===0){
+                listToFliter = this.filteredList;
+            }
+            this.filteredList = cities.filter(function(location) {
+                if (location.name.toLowerCase().indexOf(searchStr) !== -1) {
                     return location;
                 }
-            })
+            });
         }
         var links = [];
-        filteredList.sort().reverse();
-        for (var i = filteredList.length - 1; i >= 0; i--) {
-            var name = filteredList[i];
-            links.push('<li><a href="javascript:addLocation(\''+name+'\')">'+name.split('_').join(' ')+'</a></li>');
-            
-            
+        for (var i = 0; i < this.filteredList.length; i++) {
+            var location = this.filteredList[i];
+            links.push('<li><a href="javascript:locationSelected('+location.id+')">'+location.name+'</a></li>');
         };
         this.searchList.innerHTML = links.join('');
+        this.lastSearchStr = searchStr;
+
     }
 }
