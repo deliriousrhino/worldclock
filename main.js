@@ -11,7 +11,6 @@
  var addingLocation = true;
 
 
-
  var comparetimeZones = JSON.parse(localStorage.getItem("comparetimeZones"));
  if (!comparetimeZones) {
      comparetimeZones = [{
@@ -24,7 +23,6 @@
  var userTimezone = moment.tz.guess();
 
  var yourTimeZome = JSON.parse(localStorage.getItem("yourTimeZome"));
- console.log('yourTimeZome', yourTimeZome, localStorage.getItem("yourTimeZome"))
  if (!yourTimeZome) {
      yourTimeZome = {
          name: userTimezone.split('/')[1].replace(/_/g, ' '),
@@ -32,15 +30,17 @@
      }
  }
 
- var colours = ['60,200,200', '200,60,200', '200,200,60']
+ var colours = ['51,204,255']
 
 
 
-
+ function getZoneId(timeZone){
+    return timeZone.zone.split('/').join('-') +'-' + timeZone.name.split("'").join('').split(" ").join('').split(",").join('')
+ }
 
  function buildTimeRow(timeZone) {
      var dom = ''
-     dom += '<div class="zone-name" id="' + timeZone.zone.split('/').join('-') + '"></div>';
+     dom += '<div class="zone-name" id="' + getZoneId(timeZone) +'"></div>';
      dom += '<div class="zone" style="width:' + zoneWidth + '">';
      dom += '<div class="times">';
      var time = moment();
@@ -61,8 +61,11 @@
  function buildTimeCell(time, timeZone) {
      var dom = ''
      var timeStr = time.tz(timeZone.zone).format('ha');
-     var percent = Math.abs(time.hours() - 12) / 0.11;
-     dom += '<div class="time" style="background:rgba(' + timeZone.colour + ',' + (1 - (percent / 100)) + ')">' + timeStr + '</div>';
+     var percentOne = Math.abs(time.hours() - 13) / 0.11;
+     var percentTwo = Math.abs(time.hours() - 12) / 0.11;
+
+     
+     dom += '<div class="time" style="background:linear-gradient(to right, rgba(' + timeZone.colour + ',' + (1 - (percentOne / 100)) + '), rgba(' + timeZone.colour + ',' + (1 - (percentTwo / 100)) + '))">' + timeStr + '</div>';
      return dom;
  }
 
@@ -130,9 +133,9 @@
          zone: location.zoneName
      };
      var zonesList = comparetimeZones.map(function(zoneObj) {
-         return zoneObj.zone
+         return zoneObj.name
      })
-     if (zonesList.indexOf(location.zoneName) === -1 && yourTimeZome.zone !== location.zoneName) {
+     if (zonesList.indexOf(location.name) === -1 && yourTimeZome.name !== location.name) {
          comparetimeZones.push(zoneObj);
          updateComparisons();
          updateTimes();
@@ -231,7 +234,7 @@
      var zones = comparetimeZones.concat([yourTimeZome]);
      for (var z = 0; z < zones.length; z++) {
          var timeZone = zones[z];
-         var zomeNameDom = document.getElementById(timeZone.zone.split('/').join('-'));
+         var zomeNameDom = document.getElementById(getZoneId(timeZone));
          var timeStr = time.tz(timeZone.zone).format('h:mm a');
          zomeNameDom.innerHTML = '<span class="name">' + timeZone.name + '</span><span class="time-str">' + timeStr + '</span>';
      };

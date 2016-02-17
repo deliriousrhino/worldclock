@@ -1,9 +1,9 @@
 body {
-    font-family: sans-serif;
+    font-family: Geneva, sans-serif;
     padding: 0;
     margin: 0;
     color: #fff;
-    background: #000;
+    background: #3CF;
     overflow: auto;
 }
 
@@ -42,6 +42,7 @@ h5 {
 .comparisons {
     position: absolute;
     margin: 100px 0 0;
+    background: #000;
 }
 
 #times {}
@@ -55,23 +56,24 @@ h5 {
     display: inline-block;
     width: 100px;
     height: 100px;
-    font-weight: bold;
-    padding: 45px 0 0 8px;
-    color: rgba(255, 255, 255, 0.5);
+    /* font-weight: bold; */
+    padding: 35px 0 0 0px;
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .zone-name {
     position: fixed;
     left: 0;
     /* padding: 8px; */
-    font-weight: bold;
+    /* font-weight: bold; */
     z-index: 8;
     height: 100px;
     font-size: 22px;
     width: 100%;
     text-align: center;
-    text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+    /* text-shadow: 2px 2px rgba(0, 0, 0, 0.2); */
     /* color: #000; */
+    /* background: #000; */
 }
 
 .name {
@@ -82,7 +84,7 @@ h5 {
     float: left;
     width: 50%;
     padding: 8px 5px;
-    border-right: 1px solid #FF006A;
+    border-right: 1px solid #FFFFFF;
     height: 100px;
     box-sizing: border-box;
     /* color: #000; */
@@ -103,7 +105,7 @@ h5 {
 
 .edit-button {
     position: fixed;
-    bottom: -45px;
+    top: -45px;
     right: -45px;
     /* border-radius: 60px; */
     background: #FFE760;
@@ -113,8 +115,7 @@ h5 {
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     z-index: 600;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    -webkit-tap-highlight-color: transparent;
-    /* For some Androids */
+    -webkit-tap-highlight-color: transparent;/* For some Androids */
 }
 
 .edit-button::after {
@@ -126,8 +127,8 @@ h5 {
     display: block;
     /* transform: rotate(45deg); */
     position: absolute;
-    top: 29px;
-    left: 14px;
+    top: 56px;
+    left: 44px;
     transition: all 0.3s ease-in-out;
 }
 
@@ -135,8 +136,8 @@ h5 {
     content: '';
     display: block;
     position: absolute;
-    top: 51px;
-    left: 14px;
+    top: 78px;
+    left: 44px;
     transition: all 0.3s ease-in-out;
     width: 0;
     height: 0;
@@ -154,8 +155,8 @@ h5 {
     background: #fff;
     transform: rotate(180deg);
     position: absolute;
-    top: 29px;
-    left: 15px;
+    top: 60px;
+    left: 44px;
 }
 
 .edit-button.close::before {
@@ -166,8 +167,8 @@ h5 {
     background: #fff;
     transform: rotate(90deg);
     position: absolute;
-    top: 29px;
-    left: 16px;
+    top: 60px;
+    left: 44px;
     border: none;
 }
 
@@ -236,7 +237,7 @@ h5 {
 
 .your-location {
     color: #000;
-    padding: 8px;
+    padding: 8px 8px 8px 38px;
     border-bottom: 1px solid #ccc;
     display: block;
     text-decoration: none;
@@ -252,7 +253,7 @@ h5 {
     transform: rotate(45deg);
     position: absolute;
     top: 19px;
-    right: 14px;
+    left: 14px;
     transition: all 0.3s ease-in-out;
 }
 
@@ -261,7 +262,7 @@ h5 {
     display: block;
     position: absolute;
     top: 39px;
-    right: 20px;
+    left: 6px;
     transition: all 0.3s ease-in-out;
     width: 0;
     height: 0;
@@ -282,9 +283,10 @@ h5 {
     height: 50px;
     display: block;
     padding: 16px 8px;
-    color: #000;
+    color: #FFF;
     position: relative;
     font-weight: bold;
+    background: #56B0CE;
 }
 
 .add-button:before {
@@ -292,7 +294,7 @@ h5 {
     width: 3px;
     height: 22px;
     display: block;
-    background: #000;
+    background: #FFF;
     transform: rotate(90deg);
     position: absolute;
     top: 13px;
@@ -306,7 +308,7 @@ h5 {
     width: 3px;
     height: 22px;
     display: block;
-    background: #000;
+    background: #FFF;
     transform: rotate(0deg);
     position: absolute;
     top: 13px;
@@ -403,7 +405,7 @@ input {
     color: #000;
     overflow: scroll;
     height: calc(100% - 110px);
-    background: #CC006C;
+    background: #FFFFFF;
 }
 .search-list {
     margin: 0;
@@ -411,7 +413,8 @@ input {
     color: #000;
     overflow: scroll;
     height: calc(100% - 40px);
-    background: #CC006C;
+    /* background: #CC006C; */
+    border-top: 1px solid #ccc;
 }
 .search-list li,
 .zone-list li {
@@ -421,12 +424,13 @@ input {
 .zone-list li a {
     display: block;
     padding: 8px;
-    background: linear-gradient( 169deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
-    color: rgba(255, 255, 255, 0.9);
+    /* background: linear-gradient( 169deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)); */
+    color: rgba(0, 0, 0, 0.9);
     /* font-weight: bolder; */
     font-size: 18px;
     position: relative;
     text-decoration: none;
+    border-bottom: 1px solid #ECECEC;
 }
 .zone-list li a:after {
     content: ' ';
@@ -436,5 +440,11 @@ input {
     top: 16px;
     width: 16px;
     height: 2px;
-    background: #fff;
+    background: #000;
+}
+.zone-list li a:hover:after {
+    width: 18px;
+    height: 3px;
+    right: 6px;
+     transition: all 0.4s ease-in-out;
 }

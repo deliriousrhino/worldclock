@@ -6,7 +6,7 @@ var Settings = {
         div.setAttribute('id', 'settings');
         div.setAttribute('class', 'settings');
         // create inner dom
-        var dom = '<a href="javascript:editYourLocation()" class="your-location"></a><ul id="zone-list" class="zone-list"></ul><a id="add-button" class="add-button" href="javascript:openSearch()"><span>Add Location</span></a>';
+        var dom = '<a href="javascript:editYourLocation()" class="your-location"></a><a id="add-button" class="add-button" href="javascript:openSearch()"><span>Add Location</span></a><ul id="zone-list" class="zone-list"></ul>';
         div.innerHTML = dom;
         // add 
         parentNode.appendChild(div);
@@ -21,6 +21,7 @@ var Settings = {
     },
 
     updateList: function() {
+        console.log('updateList')
         var dom = '';
         for (var i = 0; i < comparetimeZones.length; i++) {
             var zone = comparetimeZones[i];
