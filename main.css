@@ -1,14 +1,23 @@
 body {
-    font-family: sans-serif;
+    font-family: Geneva, sans-serif;
     padding: 0;
     margin: 0;
     color: #fff;
-    background: #000;
+    background: #3CF;
     overflow: auto;
 }
 
 html {
     box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0;
+    padding: 0;
 }
 
 *,
@@ -33,6 +42,7 @@ html {
 .comparisons {
     position: absolute;
     margin: 100px 0 0;
+    background: #000;
 }
 
 #times {}
@@ -46,50 +56,65 @@ html {
     display: inline-block;
     width: 100px;
     height: 100px;
-    font-weight: bold;
-    padding: 45px 0 0 8px;
-    color: rgba(255, 255, 255, 0.5);
+    /* font-weight: bold; */
+    padding: 35px 0 0 0px;
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .zone-name {
     position: fixed;
     left: 0;
-    padding: 8px;
-    font-weight: bold;
+    /* padding: 8px; */
+    /* font-weight: bold; */
     z-index: 8;
     height: 100px;
     font-size: 22px;
     width: 100%;
     text-align: center;
-    text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+    /* text-shadow: 2px 2px rgba(0, 0, 0, 0.2); */
+    /* color: #000; */
+    /* background: #000; */
 }
 
 .name {
     width: 15 0px;
-    display: inline-block;
+    /* display: inline-block; */
     text-align: right;
-    margin: 0 5px 0 0;
+    /* margin: 0 5px 0 0; */
+    float: left;
+    width: 50%;
+    padding: 8px 5px;
+    border-right: 1px solid #FFFFFF;
+    height: 100px;
+    box-sizing: border-box;
+    /* color: #000; */
 }
 
 .time-str {
     /* width: 200px; */
     display: inline-block;
     text-align: left;
-    margin: 0 0 0 5px;
+    /* margin: 0 0 0 5px; */
+    float: left;
+    width: 50%;
+    padding: 8px 5px;
+    height: 100px;
+    box-sizing: border-box;
+    /* color: #000; */
 }
 
 .edit-button {
     position: fixed;
-    bottom: -45px;
+    top: -45px;
     right: -45px;
     /* border-radius: 60px; */
     background: #FFE760;
     transform: rotate(45deg);
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     z-index: 600;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;/* For some Androids */
 }
 
@@ -97,13 +122,13 @@ html {
     content: '';
     width: 4px;
     height: 25px;
-    border-top:3px solid #fff;
-    border-bottom:20px solid #fff;
+    border-top: 3px solid #fff;
+    border-bottom: 20px solid #fff;
     display: block;
     /* transform: rotate(45deg); */
     position: absolute;
-    top: 27px;
-    left: 14px;
+    top: 56px;
+    left: 44px;
     transition: all 0.3s ease-in-out;
 }
 
@@ -111,8 +136,8 @@ html {
     content: '';
     display: block;
     position: absolute;
-    top: 49px;
-    left: 14px;
+    top: 78px;
+    left: 44px;
     transition: all 0.3s ease-in-out;
     width: 0;
     height: 0;
@@ -125,26 +150,34 @@ html {
 .edit-button.close::after {
     content: '';
     width: 3px;
-    height: 30px;
+    height: 24px;
     display: block;
     background: #fff;
     transform: rotate(180deg);
     position: absolute;
-    top: 24px;
-    left: 17px;
+    top: 60px;
+    left: 44px;
 }
 
 .edit-button.close::before {
     content: '';
     width: 3px;
-    height: 30px;
+    height: 24px;
     display: block;
     background: #fff;
     transform: rotate(90deg);
     position: absolute;
-    top: 25px;
-    left: 17px;
+    top: 60px;
+    left: 44px;
     border: none;
+}
+
+.edit-button.close:hover:after {
+    transform: rotate(360deg);
+}
+
+.edit-button.close:hover:before {
+    transform: rotate(270deg);
 }
 
 .edit-button:hover {
@@ -168,37 +201,202 @@ html {
     opacity: 1;
 }
 
-.picker {
-    transform: translate(100px, 300%) rotate(-30deg);
+.location-search,
+.settings {
     width: calc(100% - 16px);
     height: calc(100% - 16px);
     background: #fff;
-    border-radius: 4px;
+    overflow: hidden;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 500;
-    transition: all 0.5s cubic-bezier(0.26, 0.62, 0, 1.02);
+    transition: all 0.5s cubic-bezier(0.24, 0.52, 0.26, 1.01);
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-    /* padding: 8px; */
+}
+
+.settings {
+    transform: translate(200%, 100px) rotate(30deg);
+}
+
+.settings-open {
+    transform: translate(8px, 8px) rotate(0deg);
+}
+
+.settings-close {
+    transform: translate(-200%, 100px) rotate(-30deg);
+}
+
+.location-search {
+    transform: translate(200%, 100px) rotate(30deg);
+}
+
+.location-search-open {
+    transform: translate(8px, 8px) rotate(0deg);
+}
+
+.your-location {
+    color: #000;
+    padding: 8px 8px 8px 38px;
+    border-bottom: 1px solid #ccc;
+    display: block;
+    text-decoration: none;
+}
+
+.your-location::after {
+    content: '';
+    width: 4px;
+    height: 25px;
+    border-top: 3px solid #000;
+    border-bottom: 20px solid #000;
+    display: block;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 19px;
+    left: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+.your-location::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 39px;
+    left: 6px;
+    transition: all 0.3s ease-in-out;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 3px 3px 0;
+    /* transform: rotate(-45deg); */
+    border-color: transparent transparent transparent #000;
+}
+
+
+.your-location h5 {
+    font-weight: normal;
+}
+
+.add-button {
+    text-decoration: none;
+    box-sizing: border-box;
+    height: 50px;
+    display: block;
+    padding: 16px 8px;
+    color: #FFF;
+    position: relative;
+    font-weight: bold;
+    background: #56B0CE;
+}
+
+.add-button:before {
+    content: '';
+    width: 3px;
+    height: 22px;
+    display: block;
+    background: #FFF;
+    transform: rotate(90deg);
+    position: absolute;
+    top: 13px;
+    left: 19px;
+    border: none;
+    transition: all 0.15s ease-in-out
+}
+
+.add-button:after {
+    content: '';
+    width: 3px;
+    height: 22px;
+    display: block;
+    background: #FFF;
+    transform: rotate(0deg);
+    position: absolute;
+    top: 13px;
+    left: 19px;
+    border: none;
+    transition: all 0.1s ease-in-out
+}
+
+.add-button:hover:before {
+    transform: rotate(270deg);
+}
+
+.add-button:hover:after {
+    transform: rotate(180deg);
+}
+
+.add-button span {
+    padding: 0 30px;
+    line-height: 1;
+    transition: all 0.2s ease-in;
+}
+
+.header-bar {
+    height: 40;
+    border-bottom: 1px solid purple;
+    display: flex;
 }
 
 input {
     height: 40;
-    width: 100%;
     padding: 2px;
     line-height: 0em;
     font-size: 24px;
     border: none;
-    border-bottom: 1px solid purple;
-    border-radius: 4px 4px 0 0;
+    border-radius: 0;
     margin: 0;
     line-height: normal;
-    /* margin: 4px; */
+    flex-grow: 1;
 }
 
-.picker-open {
-    transform: translate(8px, 8px) rotate(0deg);
+.back-button {
+    height: 40px;
+    width: 40px;
+    background: #fff;
+    position: relative;
+}
+
+.back-button:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 19px;
+    left: 7px;
+    height: 3px;
+    width: 22px;
+    background: #000;
+    transform: rotate(45deg);
+   transition: all 0.1s  ease-in-out
+}
+
+.back-button:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 19px;
+    left: 7px;
+    height: 3px;
+    width: 22px;
+    background: #000;
+    transform: rotate(-45deg);
+    transition: all 0.15s ease-in-out
+}
+
+.back-button:hover:after {
+     transform: rotate(220deg);
+}
+.back-button:hover:before {
+     transform: rotate(135deg);
+}
+
+.card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.5s cubic-bezier(0.26, 0.62, 0, 1.02);
+    width: 100%;
+    height: 100%;
+    background: #fff;
 }
 
 .zone-list {
@@ -206,19 +404,47 @@ input {
     padding: 0;
     color: #000;
     overflow: scroll;
-    height: calc(100% - 40px);
-    background: #CC006C;
+    height: calc(100% - 110px);
+    background: #FFFFFF;
 }
-
+.search-list {
+    margin: 0;
+    padding: 0;
+    color: #000;
+    overflow: scroll;
+    height: calc(100% - 40px);
+    /* background: #CC006C; */
+    border-top: 1px solid #ccc;
+}
+.search-list li,
 .zone-list li {
     list-style-type: none;
 }
-
+.search-list li a,
 .zone-list li a {
     display: block;
     padding: 8px;
-    background: linear-gradient( 169deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
-    color: rgba(255, 255, 255, 0.9);
+    /* background: linear-gradient( 169deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)); */
+    color: rgba(0, 0, 0, 0.9);
     /* font-weight: bolder; */
     font-size: 18px;
+    position: relative;
+    text-decoration: none;
+    border-bottom: 1px solid #ECECEC;
+}
+.zone-list li a:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    right: 6px;
+    top: 16px;
+    width: 16px;
+    height: 2px;
+    background: #000;
+}
+.zone-list li a:hover:after {
+    width: 18px;
+    height: 3px;
+    right: 6px;
+     transition: all 0.4s ease-in-out;
 }

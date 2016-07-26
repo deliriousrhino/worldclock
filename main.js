@@ -7,52 +7,50 @@
  var totalHours = 37;
  var minLength = timeWidth / 60; // px length of a min;
  var zoneWidth = timeWidth * totalHours;
- var isPickerOpen = false;
+ var isSettingsOpen = false;
+ var addingLocation = true;
 
- var comparetimeZones = [{
-     name: 'Vancouver',
-     zone: 'America/Vancouver'
- }, {
-     name: 'LA',
-     zone: 'America/Los_Angeles'
- }, {
-     name: 'New York',
-     zone: 'America/New_York'
- }, {
-     name: 'Tokyo',
-     zone: 'Asia/Tokyo'
- }, {
-     name: 'London',
-     zone: 'Europe/London'
- }, {
-     name: 'Rome',
-     zone: 'Europe/Rome'
- }];
- // moment.tz.names()
- var userTimezone = moment.tz.guess();
- var yourTimeZome = {
-     name: userTimezone.split('/')[1].replace(/_/g, ' '),
-     zone: userTimezone
+
+ var comparetimeZones = JSON.parse(localStorage.getItem("comparetimeZones"));
+ if (!comparetimeZones) {
+     comparetimeZones = [{
+         name: 'Vancouver',
+         zone: 'America/Vancouver'
+     }];
  }
 
- var colours = ['60,200,200', '200,60,200', '200,200,60']
+
+ var userTimezone = moment.tz.guess();
+
+ var yourTimeZome = JSON.parse(localStorage.getItem("yourTimeZome"));
+ if (!yourTimeZome) {
+     yourTimeZome = {
+         name: userTimezone.split('/')[1].replace(/_/g, ' '),
+         zone: userTimezone
+     }
+ }
+
+ var colours = ['51,204,255']
 
 
+
+ function getZoneId(timeZone){
+    return timeZone.zone.split('/').join('-') +'-' + timeZone.name.split("'").join('').split(" ").join('').split(",").join('')
+ }
 
  function buildTimeRow(timeZone) {
      var dom = ''
-     dom += '<div class="zone-name" id="' + timeZone.zone.split('/').join('-') + '"></div>';
+     dom += '<div class="zone-name" id="' + getZoneId(timeZone) +'"></div>';
      dom += '<div class="zone" style="width:' + zoneWidth + '">';
-
      dom += '<div class="times">';
      var time = moment();
      time.hours(0);
      time.hours(time.hours() - 6);
      time.minutes(0);
      var randomColourId = Math.round(Math.random() * (colours.length - 1));
-     var colour = colours[randomColourId]
+     timeZone.colour = (timeZone.colour) ? timeZone.colour : colours[randomColourId]
      for (var i = 0; i < totalHours; i++) {
-         dom += buildTimeCell(time, timeZone, colour);
+         dom += buildTimeCell(time, timeZone);
          time.hours(time.hours() + 1);
 
      };
@@ -60,12 +58,14 @@
      return dom;
  }
 
- function buildTimeCell(time, timeZone, colour) {
+ function buildTimeCell(time, timeZone) {
      var dom = ''
      var timeStr = time.tz(timeZone.zone).format('ha');
-     var percent = Math.abs(time.hours() - 12) / 0.11;
+     var percentOne = Math.abs(time.hours() - 13) / 0.11;
+     var percentTwo = Math.abs(time.hours() - 12) / 0.11;
 
-     dom += '<div class="time" style="background:rgba(' + colour + ',' + (1 - (percent / 100)) + ')">' + timeStr + '</div>';
+     
+     dom += '<div class="time" style="background:linear-gradient(to right, rgba(' + timeZone.colour + ',' + (1 - (percentOne / 100)) + '), rgba(' + timeZone.colour + ',' + (1 - (percentTwo / 100)) + '))">' + timeStr + '</div>';
      return dom;
  }
 
@@ -76,30 +76,115 @@
      return dom;
  }
 
+ function updateYourTime() {
+     var dom = buildTimeRow(yourTimeZome);
+     var yourTime = document.getElementsByClassName('your-time')[0];
+     yourTime.innerHTML = dom;
+ }
+
  function buildComparisons() {
-     var dom = '<div class="comparisons">';
-     for (var z = 0; z < comparetimeZones.length; z++) {
-         var timeZone = comparetimeZones[z];
-         dom += buildTimeRow(timeZone)
-     };
+     var dom = '<div id="comparisons" class="comparisons">';
+     dom += buildComparisonsRows();
      dom += '</div>';
      return dom;
  }
 
+ function buildComparisonsRows() {
+     var dom = '';
+     for (var z = 0; z < comparetimeZones.length; z++) {
+         var timeZone = comparetimeZones[z];
+         dom += buildTimeRow(timeZone)
+     };
+     return dom;
+ }
 
+ function locationSelected(locationIndex) {
+     var location;
+     for (var i = cities.length - 1; i >= 0; i--) {
+         if (cities[i].id === Number(locationIndex)) {
+             location = cities[i];
+             break;
+         }
+     };
+     if (addingLocation) {
+         addLocation(location);
+     } else {
+         changeYourLocation(location)
+     }
+ }
+
+ function changeYourLocation(location) {
+
+     yourTimeZome = {
+         name: location.name,
+         zone: location.zoneName
+     }
+     updateYourTime();
+     updateTimes();
+     closeSearch();
+     Settings.updateYourLocation(yourTimeZome.name);
+     yourTime = document.getElementsByClassName('times')[0];
+     save();
+ }
+
+ function addLocation(location) {
+     var zoneObj = {
+         name: location.name,
+         zone: location.zoneName
+     };
+     var zonesList = comparetimeZones.map(function(zoneObj) {
+         return zoneObj.name
+     })
+     if (zonesList.indexOf(location.name) === -1 && yourTimeZome.name !== location.name) {
+         comparetimeZones.push(zoneObj);
+         updateComparisons();
+         updateTimes();
+         Settings.updateList();
+     }
+     closeSearch();
+     save();
+ }
+
+ function removeLocation(zone) {
+     var name = zone;
+     if (name.indexOf('/') !== -1) {
+         name = zone.split('/')[1].split('_').join(' ');
+     }
+     var newList = [];
+     for (var i = 0; i < comparetimeZones.length; i++) {
+         var zone = comparetimeZones[i];
+         if (zone.name !== name) {
+             newList.push(zone)
+         }
+     };
+     comparetimeZones = newList;
+     updateComparisons();
+     updateTimes();
+     Settings.updateList();
+     save()
+ }
+
+ function updateComparisons() {
+     var comparisonsDom = buildComparisonsRows();
+     var comparisons = document.getElementById('comparisons');
+     comparisons.innerHTML = comparisonsDom;
+ }
 
  function init() {
      var times = document.getElementById('times');
      var dom = buildYourTime();
      dom += buildComparisons();
-     dom += '<a id="edit-button" class="edit-button" href="javascript:togglePicker()"></a>';
-     dom += '<a id="mask" class="mask" href="javascript:closePicker()"></a>';
-     dom += '<div id="picker" class="picker"><input type="search"></input><ul id="zone-list" class="zone-list"><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li><li><a>Sydney Australia</a></li></ul></div>';
+     dom += '<a id="edit-button" class="edit-button" href="javascript:toggleSettings()"></a>';
+     //dom += '<div id="picker" class="picker"></div>';
      times.innerHTML = dom;
      yourTime = document.getElementsByClassName('times')[0];
      zoneNames = document.getElementsByClassName('zone-name');
-
      setTimeout(scrollToNow, 100);
+     // 
+     Mask.init(times);
+     Settings.init(times);
+     LoctionSearch.init(times);
+     Settings.updateYourLocation(yourTimeZome.name);
  }
 
  function scrollToNow() {
@@ -149,7 +234,7 @@
      var zones = comparetimeZones.concat([yourTimeZome]);
      for (var z = 0; z < zones.length; z++) {
          var timeZone = zones[z];
-         var zomeNameDom = document.getElementById(timeZone.zone.split('/').join('-'));
+         var zomeNameDom = document.getElementById(getZoneId(timeZone));
          var timeStr = time.tz(timeZone.zone).format('h:mm a');
          zomeNameDom.innerHTML = '<span class="name">' + timeZone.name + '</span><span class="time-str">' + timeStr + '</span>';
      };
@@ -157,40 +242,62 @@
      scrollInterval = window.requestAnimationFrame(updateScroll);
  }
 
+
  function scrollEnd() {
      scrollStarted = false;
      window.cancelAnimationFrame(scrollInterval);
  }
-function togglePicker(){
-    if (isPickerOpen){
-        closePicker()
-    } else {
-        openPicker();
-    }
 
-}
- function openPicker() {
-    isPickerOpen = true;
-     var body = document.getElementsByTagName("body")[0];
-     body.className = "no-scroll"
-     var picker = document.getElementById('picker');
-     picker.className = picker.className + " picker-open";
-     var mask = document.getElementById('mask');
-     mask.className = mask.className + " mask-open";
+ function toggleSettings() {
+     if (isSettingsOpen) {
+         closeSettings()
+     } else {
+         openSettings();
+     }
+ }
+
+ function openSettings() {
+     isSettingsOpen = true;
+     Settings.open();
+     Mask.open();
      var editButton = document.getElementById('edit-button');
      editButton.className = editButton.className + " close";
  }
 
- function closePicker() {
-    isPickerOpen = false;
-     var picker = document.getElementById('picker');
-     picker.className = "picker";
-     var mask = document.getElementById('mask');
-     mask.className = "mask";
-     var body = document.getElementsByTagName("body")[0];
-     body.className = ""
-      var editButton = document.getElementById('edit-button');
+ function openSearch() {
+     addingLocation = true;
+     Settings.off();
+     LoctionSearch.open();
+ }
+
+ function editYourLocation() {
+     addingLocation = false;
+     Settings.off();
+     LoctionSearch.open();
+ }
+
+ function closeSearch() {
+     Settings.open();
+     LoctionSearch.close();
+ }
+
+ function closeSettings() {
+     isSettingsOpen = false;
+     Settings.close();
+     Mask.close();
+     var editButton = document.getElementById('edit-button');
      editButton.className = "edit-button";
+     LoctionSearch.close();
+ }
+
+ function save() {
+     localStorage.setItem('yourTimeZome', JSON.stringify(yourTimeZome));
+     localStorage.setItem('comparetimeZones', JSON.stringify(comparetimeZones));
+ }
+
+ function clearSavedData() {
+     localStorage.setItem('yourTimeZome', null);
+     localStorage.setItem('comparetimeZones', null);
  }
 
  init();
