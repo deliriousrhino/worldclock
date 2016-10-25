@@ -9,6 +9,8 @@
  var zoneWidth = timeWidth * totalHours;
  var isSettingsOpen = false;
  var addingLocation = true;
+ var timeMinOffset = 0;
+ var lastPosition = 0;
 
 
  var comparetimeZones = JSON.parse(localStorage.getItem("comparetimeZones"));
@@ -30,31 +32,60 @@
      }
  }
 
- var colours = ['51,204,255']
+ function init() {
+     var times = document.getElementById('times');
+     var dom = buildYourTime();
+     dom += buildComparisons();
+     dom += '<a id="edit-button" class="edit-button" href="javascript:toggleSettings()"></a>';
+     dom += '<a id="reset-button" class="reset-button" href="javascript:reset()"></a>';
+     //dom += '<div id="picker" class="picker"></div>';
+     times.innerHTML = dom;
+     // yourTime = document.getElementsByClassName('times')[0];
+     zoneNames = document.getElementsByClassName('zone-name');
+     // 
+     Mask.init(times);
+     Settings.init(times);
+     LoctionSearch.init(times);
+     Settings.updateYourLocation(yourTimeZome.name);
+     addEvents();
+
+     updateYourTime();
+     updateTimes();
+ }
+
+ function onLoad() {
+     document.addEventListener("deviceready", onDeviceReady, false);
+ }
+
+ // device APIs are available
+ function onDeviceReady() {
+     // Register the event listener
+     document.addEventListener("backbutton", onBackKeyDown, false);
+ }
+
+ // Handle the back button
+ function onBackKeyDown(e) {
+     if (LoctionSearch.isOpen) {
+         closeSearch();
+         e.preventDefault();
+         return
+     }
+     if (Settings.isOpen) {
+         closeSettings();
+         e.preventDefault();
+         return
+     }
+ }
 
 
 
- function getZoneId(timeZone){
-    return timeZone.zone.split('/').join('-') +'-' + timeZone.name.split("'").join('').split(" ").join('').split(",").join('')
+ function getZoneId(timeZone) {
+     return timeZone.zone.split('/').join('-') + '-' + timeZone.name.split("'").join('').split(" ").join('').split(",").join('')
  }
 
  function buildTimeRow(timeZone) {
      var dom = ''
-     dom += '<div class="zone-name" id="' + getZoneId(timeZone) +'"></div>';
-     dom += '<div class="zone" style="width:' + zoneWidth + '">';
-     dom += '<div class="times">';
-     var time = moment();
-     time.hours(0);
-     time.hours(time.hours() - 6);
-     time.minutes(0);
-     var randomColourId = Math.round(Math.random() * (colours.length - 1));
-     timeZone.colour = (timeZone.colour) ? timeZone.colour : colours[randomColourId]
-     for (var i = 0; i < totalHours; i++) {
-         dom += buildTimeCell(time, timeZone);
-         time.hours(time.hours() + 1);
-
-     };
-     dom += '</div></div>';
+     dom += '<div class="zone-name" id="' + getZoneId(timeZone) + '"></div>';
      return dom;
  }
 
@@ -64,7 +95,7 @@
      var percentOne = Math.abs(time.hours() - 13) / 0.11;
      var percentTwo = Math.abs(time.hours() - 12) / 0.11;
 
-     
+
      dom += '<div class="time" style="background:linear-gradient(to right, rgba(' + timeZone.colour + ',' + (1 - (percentOne / 100)) + '), rgba(' + timeZone.colour + ',' + (1 - (percentTwo / 100)) + '))">' + timeStr + '</div>';
      return dom;
  }
@@ -170,87 +201,85 @@
      comparisons.innerHTML = comparisonsDom;
  }
 
- function init() {
+
+
+
+ function addEvents() {
      var times = document.getElementById('times');
-     var dom = buildYourTime();
-     dom += buildComparisons();
-     dom += '<a id="edit-button" class="edit-button" href="javascript:toggleSettings()"></a>';
-     //dom += '<div id="picker" class="picker"></div>';
-     times.innerHTML = dom;
-     yourTime = document.getElementsByClassName('times')[0];
-     zoneNames = document.getElementsByClassName('zone-name');
-     setTimeout(scrollToNow, 100);
-     // 
-     Mask.init(times);
-     Settings.init(times);
-     LoctionSearch.init(times);
-     Settings.updateYourLocation(yourTimeZome.name);
+     times.addEventListener("touchstart", touchStart, false);
+     times.addEventListener("touchend", touchEnd, false);
+     times.addEventListener("touchmove", touchMove, false);
  }
 
- function scrollToNow() {
-
-     var time = moment();
-     var totalMins = ((time.hours()) * 60) + time.minutes();
-     var halfWidth = window.innerWidth / 2;
-     var scrollPos = (6 * 60 * minLength + (totalMins * minLength)) - halfWidth
-     window.scrollTo(Math.round(scrollPos), 0);
-
-     scroll();
-     window.addEventListener('scroll', scroll);
+ function touchStart(evt) {
+     lastPosition = getPosition(evt)
  }
 
- function scroll() {
-     if (!scrollStarted) {
-         scrollStart()
+ function touchEnd(evt) {}
+
+ function touchMove(evt) {
+     var newPosition = getPosition(evt);
+     var xdiff = lastPosition.x - newPosition.x;
+     var ydiff = lastPosition.y - newPosition.y;
+     if (Math.abs(xdiff) > Math.abs(ydiff)) {
+         timeMinOffset += xdiff;
+         lastPosition = newPosition;
+         updateTimes();
      }
-     if (scrollEndTimeout) {
-         clearTimeout(scrollEndTimeout)
-     }
-     scrollEndTimeout = setTimeout(scrollEnd, 500)
+
  }
 
- function scrollStart() {
-    console.log('scrollStart');
-     scrollStarted = true;
-     scrollInterval = window.requestAnimationFrame(updateScroll);
+ function getPosition(evt) {
+     return { x: evt.touches[0].pageX, y: evt.touches[0].pageY };
+ }
+
+ function reset() {
+     timeMinOffset = 0;
+     updateTimes();
  }
 
  function updateScroll() {
-    console.log('updateScroll');
-     yourTime.style.transform = 'translate(-' + window.scrollX + 'px)';
-     yourTime.style.webkitTransform = 'translate(-' + window.scrollX + 'px)';
-     for (var i = 1; i < zoneNames.length; i++) {
-         var zoneName = zoneNames[i]
-         zoneName.style.transform = 'translate(0,-' + window.scrollY + 'px)';
-          zoneName.style.webkitTransform = 'translate(0,-' + window.scrollY + 'px)';
-     };
      updateTimes();
  }
 
  function updateTimes() {
-     var halfWidth = window.innerWidth / 2;
-     var timeMinOffset = Math.round((window.scrollX + halfWidth) / minLength);
      var time = moment();
-     time.hours(0);
-     time.minutes(0);
-     time.hours(time.hours() - 6);
      time.minutes(time.minutes() + timeMinOffset);
      var zones = comparetimeZones.concat([yourTimeZome]);
      for (var z = 0; z < zones.length; z++) {
          var timeZone = zones[z];
          var zomeNameDom = document.getElementById(getZoneId(timeZone));
+
+         var timeStr = time.tz(timeZone.zone).format('ha');
+         var percentOne = Math.abs(time.hours() - 13) / 0.11;
+         var percentTwo = Math.abs(time.hours() - 12) / 0.11;
+         var hours = time.hours();
+
+
+         var style = 'linear-gradient(to right, rgba(51,204,255,' + (1 - (percentOne / 100)) + '), rgba(51,204,255,' + (1 - (percentTwo / 100)) + '))'
+         zomeNameDom.style.background = style;
+
          var timeStr = time.tz(timeZone.zone).format('h:mm a');
-         zomeNameDom.innerHTML = '<span class="name">' + timeZone.name + '</span><span class="time-str">' + timeStr + '</span>';
+         var dateStr = time.tz(timeZone.zone).format('ddd Do MMM');
+         var dom = '<span class="name">' + timeZone.name + '</span>'
+         var clickTime = '';
+         var clickDate = '';
+         var clickClass = '';
+         if (z === zones.length-1) {
+             clickTime = 'onclick="showTime()"'
+             clickDate = 'onclick="showDate()"'
+             clickClass = 'btn'
+         }
+         dom += '<span class="time-str ' + clickClass + '" ' + clickTime + '>' + timeStr + '</span>';
+         dom += '<span class="date-str ' + clickClass + '" ' + clickDate + '>' + dateStr + '</span>';
+         //
+         zomeNameDom.innerHTML =dom;
      };
-     window.cancelAnimationFrame(scrollInterval);
-     scrollInterval = window.requestAnimationFrame(updateScroll);
  }
 
 
- function scrollEnd() {
-     scrollStarted = false;
-     window.cancelAnimationFrame(scrollInterval);
- }
+
+
 
  function toggleSettings() {
      if (isSettingsOpen) {
@@ -302,6 +331,20 @@
  function clearSavedData() {
      localStorage.setItem('yourTimeZome', null);
      localStorage.setItem('comparetimeZones', null);
+ }
+
+ function showTime() {
+     var dt = new DateTimePicker.Time({})
+     dt.on('selected', function(formatTime, now) {
+         console.log('selected time: ', formatTime, now)
+     })
+ }
+
+ function showDate() {
+     var dt = new DateTimePicker.Date({})
+     dt.on('selected', function(formatDate, now) {
+         console.log('selected date: ', formatDate, now)
+     });
  }
 
  init();

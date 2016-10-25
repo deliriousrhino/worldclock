@@ -3,13 +3,17 @@
 	<meta charset="utf-8">
 	<meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
 	<title>World Cloak</title>
+	<link href="datetimepicker/date-time-picker.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="main.css">
 </head>
-<body>
-	<div id="times"></div>
+<body onload="onLoad()">
+	<div id="times" ></div>
 </body>
+<script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="bower_components/moment/moment.js"></script>
 <script type="text/javascript" src="bower_components/moment-timezone/builds/moment-timezone-with-data.js"></script>
+
+<script type="text/javascript" src="datetimepicker/date-time-picker.min.js"></script>
 <script type="text/javascript" src="cities-list.js"></script>
 <script type="text/javascript" src="settings.js"></script>
 <script type="text/javascript" src="mask.js"></script>

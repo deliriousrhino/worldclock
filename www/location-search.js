@@ -2,6 +2,7 @@ var LoctionSearch = {
     lastSearchStr: null,
     element: null,
     filteredList: null,
+    isOpen: false,
     init: function(parentNode) {
 
         var div = document.createElement('div');
@@ -17,9 +18,12 @@ var LoctionSearch = {
     },
 
     open: function() {
+        this.isOpen = true;
         this.element.className = this.element.className + " location-search-open";
+        this.buildList('')
     },
     close: function() {
+         this.isOpen = false;
         this.searchInput.value = '';
         this.element.className = "location-search";
 
@@ -35,7 +39,7 @@ var LoctionSearch = {
         //var locationNames = moment.tz.names();
         // cities-list.js
         if (!searchStr || searchStr === '') {
-            this.filteredList = cities;
+            this.filteredList = [];
         } else {
             var listToFliter = cities;
             if (this.lastSearchStr && searchStr.indexOf(this.lastSearchStr)===0){

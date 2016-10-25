@@ -1,5 +1,6 @@
 var Settings = {
     element: null,
+      isOpen: false,
     init: function(parentNode) {
         // create element
         var div = document.createElement('div');
@@ -32,6 +33,7 @@ var Settings = {
     },
 
     open: function() {
+        this.isOpen = true;
         this.element.className = "settings settings-open";
     },
 
@@ -40,6 +42,7 @@ var Settings = {
     },
 
     close: function() {
+        this.isOpen = false;
         this.element.className = "settings";
     }
 }
