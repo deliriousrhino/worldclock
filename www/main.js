@@ -210,15 +210,19 @@
  }
 
  function scrollStart() {
+    console.log('scrollStart');
      scrollStarted = true;
      scrollInterval = window.requestAnimationFrame(updateScroll);
  }
 
  function updateScroll() {
+    console.log('updateScroll');
      yourTime.style.transform = 'translate(-' + window.scrollX + 'px)';
+     yourTime.style.webkitTransform = 'translate(-' + window.scrollX + 'px)';
      for (var i = 1; i < zoneNames.length; i++) {
          var zoneName = zoneNames[i]
          zoneName.style.transform = 'translate(0,-' + window.scrollY + 'px)';
+          zoneName.style.webkitTransform = 'translate(0,-' + window.scrollY + 'px)';
      };
      updateTimes();
  }

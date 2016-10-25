@@ -1,0 +1,24 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
+        },
+        "cordova-plugin-webserver": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
+        },
+        "cordova-plugin-wkwebview-engine": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
+        }
+    },
+    "dependent_plugins": {}
+}
