@@ -22,11 +22,10 @@ var Settings = {
     },
 
     updateList: function() {
-        console.log('updateList')
         var dom = '';
         for (var i = 0; i < comparetimeZones.length; i++) {
             var zone = comparetimeZones[i];
-            dom += '<li><a href="javascript:removeLocation(\'' + zone.name + '\')">' + zone.name + '</a></li>'
+            dom += '<li>' + zone.name + '<a href="javascript:removeLocation(\'' + zone.name + '\')" class="delete"></a></li>'
         };
         var zonelist = document.getElementById('zone-list');
         zonelist.innerHTML = dom;

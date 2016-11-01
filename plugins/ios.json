@@ -18,6 +18,9 @@
         },
         "cordova-plugin-wkwebview-engine": {
             "PACKAGE_NAME": "com.deliriousrhino.worldclock"
+        },
+        "cordova-plugin-datepicker": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
         }
     },
     "dependent_plugins": {}

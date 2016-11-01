@@ -1,5 +1,5 @@
 body {
-    font-family: Geneva, sans-serif;
+    font-family: Geneva, sans-serif !important;
     padding: 0;
     margin: 0;
     color: #fff;
@@ -67,7 +67,6 @@ h5 {
 }
 
 #times {
-
 }
 
 .zone {
@@ -97,18 +96,16 @@ h5 {
     transition: background 1s ease-out;  
 }
 
-.zone-bg {
-    background-size: cover !important;
+.time-ani {
+    background: url('img/iconsAni.png') no-repeat;
+    background-size: 1024px auto !important;
     height: 100px;
+    width: 100px;
     position: absolute;
-    left: 0;
+    right: 10px;
     top: 0;
-    width: 100%;
-    opacity: 0.8;
 }
-.zone-bg.night {
-     /**  */
-}
+
 
 
 .name {
@@ -118,10 +115,18 @@ h5 {
     position: relative;
 }
 
+.btn {
+    background: rgba(255,255,255,0.3);
+    display: block;
+    width: 200px;
+    margin: auto;
+}
+
 .time-str {
     display: block;
     text-align: center;
      position: relative;
+
 }
 .date-str {
       display: block;
@@ -129,6 +134,7 @@ h5 {
     font-size: 12px;
     padding: 0 0 0 5px;
      position: relative;
+     top:2px;
 }
 .reset-button {
     position: fixed;
@@ -146,8 +152,10 @@ h5 {
     -webkit-tap-highlight-color: transparent;/* For some Androids */
     background: #FFFFFF url('img/reset.svg') no-repeat 60px 30px;
     background-size: 23px;
-
 }
+
+
+
 
 .edit-button {
     position: fixed;
@@ -364,7 +372,9 @@ h5 {
     color: #FFF;
     position: relative;
     font-weight: bold;
-    background: #56B0CE;
+    margin: 5px;
+    border-radius: 8px;
+    background: rgb(51,204,255);
 }
 
 .add-button:before {
@@ -531,8 +541,7 @@ input {
 .zone-list li {
     list-style-type: none;
 }
-.search-list li a,
-.zone-list li a {
+.search-list li a {
     display: block;
     padding: 8px;
     /* background: linear-gradient( 169deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)); */
@@ -543,20 +552,41 @@ input {
     text-decoration: none;
     border-bottom: 1px solid #ECECEC;
 }
+
+.zone-list li {
+    padding: 10px;
+    position: relative;
+    border-bottom: 1px solid #ECECEC;
+}
+.zone-list li a {
+    position: absolute;
+    right: 10px;
+    top: 1px;
+    width: 36px;
+    height: 36px;
+    display: block;
+    background: #ef6a6a;
+    color: rgba(0, 0, 0, 0.9);
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 38px;
+}
+
 .zone-list li a:after {
     content: ' ';
     display: block;
     position: absolute;
-    right: 6px;
-    top: 16px;
+    right: 10px;
+    top: 18px;
     width: 16px;
     height: 2px;
-    background: #000;
+    background: #fff;
 }
 .zone-list li a:hover:after {
     width: 18px;
     height: 3px;
-    right: 6px;
+    right: 9px;
+    top: 18px;
      -webkit-transition: all 0.4s ease-in-out;
              transition: all 0.4s ease-in-out;
 }
