@@ -3,7 +3,7 @@ var LoctionSearch = {
     element: null,
     filteredList: null,
     isOpen: false,
-    init: function(parentNode) {
+    init: function (parentNode) {
 
         var div = document.createElement('div');
         div.setAttribute('id', 'location-search');
@@ -14,27 +14,27 @@ var LoctionSearch = {
         this.searchInput = document.querySelectorAll('#location-search input')[0];
         this.searchList = document.querySelectorAll('#location-search #search-list')[0];
         this.element = document.getElementById('location-search');
-         this.buildList('');
+        this.buildList('');
     },
 
-    open: function() {
+    open: function () {
         this.isOpen = true;
         this.element.className = this.element.className + " location-search-open";
         this.buildList('')
     },
-    close: function() {
-         this.isOpen = false;
+    close: function () {
+        this.isOpen = false;
         this.searchInput.value = '';
         this.element.className = "location-search";
 
     },
-    search: function() {
+    search: function () {
         this.buildList(this.searchInput.value)
     },
-    clearList:function(){
-         this.searchList.innerHTML = '';
+    clearList: function () {
+        this.searchList.innerHTML = '';
     },
-    buildList: function(searchStr) {
+    buildList: function (searchStr) {
         searchStr = searchStr.toLowerCase();
         //var locationNames = moment.tz.names();
         // cities-list.js
@@ -42,20 +42,20 @@ var LoctionSearch = {
             this.filteredList = [];
         } else {
             var listToFliter = cities;
-            if (this.lastSearchStr && searchStr.indexOf(this.lastSearchStr)===0){
+            if (this.lastSearchStr && searchStr.indexOf(this.lastSearchStr) === 0) {
                 listToFliter = this.filteredList;
             }
-            this.filteredList = cities.filter(function(location) {
+            this.filteredList = cities.filter(function (location) {
                 if (location.name.toLowerCase().indexOf(searchStr) === 0) {
                     return location;
                 }
             });
         }
         var links = [];
-        var length = (this.filteredList.length>100)? 100 : this.filteredList.length;
+        var length = (this.filteredList.length > 100) ? 100 : this.filteredList.length;
         for (var i = 0; i < length; i++) {
             var location = this.filteredList[i];
-            links.push('<li><a href="javascript:locationSelected('+location.id+')">'+location.name+'</a></li>');
+            links.push('<li><a href="javascript:locationSelected(' + location.id + ')">' + location.name + '</a></li>');
         };
         this.searchList.innerHTML = links.join('');
         this.lastSearchStr = searchStr;

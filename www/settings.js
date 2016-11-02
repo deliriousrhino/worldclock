@@ -1,7 +1,7 @@
 var Settings = {
     element: null,
-      isOpen: false,
-    init: function(parentNode) {
+    isOpen: false,
+    init: function (parentNode) {
         // create element
         var div = document.createElement('div');
         div.setAttribute('id', 'settings');
@@ -13,34 +13,48 @@ var Settings = {
         parentNode.appendChild(div);
         this.element = document.getElementById('settings');
         this.updateList();
+        var zonelist = document.getElementById('zone-list');
+        var sortable = Sortable.create(zonelist, {
+            onEnd: function (evt) {
+                var temp = comparetimeZones[evt.oldIndex];
+                comparetimeZones[evt.oldIndex] = comparetimeZones[evt.newIndex];
+                comparetimeZones[evt.newIndex] = temp;
+                updateComparisons();
+                updateTimes();
+                save();
+            },
+        });
     },
 
-    updateYourLocation: function(name){
-        var dom = '<h5>Your Location</h5><h2>'+name+'</h2>';
+    updateYourLocation: function (name) {
+        var dom = '<h5>Your Location</h5><h2>' + name + '</h2>';
         var yourLocation = document.getElementsByClassName('your-location')[0];
         yourLocation.innerHTML = dom;
     },
 
-    updateList: function() {
+    updateList: function () {
         var dom = '';
         for (var i = 0; i < comparetimeZones.length; i++) {
             var zone = comparetimeZones[i];
-            dom += '<li>' + zone.name + '<a href="javascript:removeLocation(\'' + zone.name + '\')" class="delete"></a></li>'
+            dom += '<li class="locationItem">' + zone.name + '<a href="javascript:removeLocation(\'' + zone.name + '\')" class="delete"></a></li>'
         };
         var zonelist = document.getElementById('zone-list');
         zonelist.innerHTML = dom;
     },
 
-    open: function() {
+
+
+
+    open: function () {
         this.isOpen = true;
         this.element.className = "settings settings-open";
     },
 
-    off: function() {
+    off: function () {
         this.element.className = "settings settings-close";
     },
 
-    close: function() {
+    close: function () {
         this.isOpen = false;
         this.element.className = "settings";
     }

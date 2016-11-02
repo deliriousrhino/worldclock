@@ -26,7 +26,6 @@
       default: date.value
     })
     dt.on('selected', function (formatDate, now) {
-      console.log('selected date: ', formatDate, now)
       date.value = formatDate
     })
   }
@@ -35,7 +34,6 @@
       default: time.value
     })
     dt.on('selected', function (formatTime, now) {
-      console.log('selected time: ', formatTime, now)
       time.value = formatTime
     })
   }

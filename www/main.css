@@ -554,9 +554,11 @@ input {
 }
 
 .zone-list li {
-    padding: 10px;
+    padding: 10px 10px 10px 30px;
     position: relative;
     border-bottom: 1px solid #ECECEC;
+    background: url(img/drag.svg) no-repeat 5px center;
+    background-size: 20px;
 }
 .zone-list li a {
     position: absolute;

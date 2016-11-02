@@ -377,10 +377,8 @@
              clickDate = 'onclick="showDate()"'
              clickClass = 'btn'
          }
-
         
-
-         console.log(aniFrame)
+         aniFrame = (aniFrame===100) ? 0: aniFrame;
          var frame = frames['ani'+aniFrame]
 
          dom += '<div class="time-ani" style="background-position: ' + -(frame.x/2) + 'px ' + -(frame.y/2) + 'px;"></div>';
@@ -472,7 +470,6 @@
 
  function showDate() {
      var orgtime = moment();
-     console.log(orgtime.format('YYYY-MM-DD'))
      orgtime.minutes(orgtime.minutes() + timeMinOffset);
      var dt = new DateTimePicker.Date({
          default: orgtime.format('YYYY-MM-DD') // default `new Date()`. If `default` type is string, then it will be parsed to `Date` instance by `format` . Or it can be a `Date` instance
