@@ -16,17 +16,18 @@ var Settings = {
         this.updateList();
         var zonelist = document.getElementById('zone-list');
         var sortable = Sortable.create(zonelist, {
+            handle: '.handle',
             onEnd: function (evt) {
-                var temp = comparetimeZones[evt.oldIndex];
-                comparetimeZones[evt.oldIndex] = comparetimeZones[evt.newIndex];
-                comparetimeZones[evt.newIndex] = temp;
-                console.log('evt.oldIndex', evt.oldIndex)
-                console.log('evt.newIndex', evt.newIndex)
-                console.log('comparetimeZones', comparetimeZones)
-                self.updateList();
-                updateComparisons();
-                updateTimes();
-                save();
+                if (comparetimeZones.length > 1) {
+                    var temp = comparetimeZones[evt.oldIndex];
+                    comparetimeZones[evt.oldIndex] = comparetimeZones[evt.newIndex];
+                    comparetimeZones[evt.newIndex] = temp;
+                    self.updateList();
+                    updateComparisons();
+                    updateTimes();
+                    save();
+                }
+
             },
         });
     },
@@ -44,9 +45,9 @@ var Settings = {
         var dom = '';
         for (var i = 0; i < comparetimeZones.length; i++) {
             var zone = comparetimeZones[i];
-            dom += '<li class="locationItem">' + zone.name + '<a href="javascript:removeLocation(\'' + zone.name + '\')" class="delete"></a></li>'
+            dom += '<li class="locationItem"><div class="handle"></div>' + zone.name + '<a href="javascript:removeLocation(\'' + zone.name + '\')" class="delete"></a></li>'
         };
-        
+
         zonelist.innerHTML = dom;
     },
 
