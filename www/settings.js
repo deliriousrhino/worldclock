@@ -2,6 +2,7 @@ var Settings = {
     element: null,
     isOpen: false,
     init: function (parentNode) {
+        var self = this;
         // create element
         var div = document.createElement('div');
         div.setAttribute('id', 'settings');
@@ -19,6 +20,10 @@ var Settings = {
                 var temp = comparetimeZones[evt.oldIndex];
                 comparetimeZones[evt.oldIndex] = comparetimeZones[evt.newIndex];
                 comparetimeZones[evt.newIndex] = temp;
+                console.log('evt.oldIndex', evt.oldIndex)
+                console.log('evt.newIndex', evt.newIndex)
+                console.log('comparetimeZones', comparetimeZones)
+                self.updateList();
                 updateComparisons();
                 updateTimes();
                 save();
@@ -33,12 +38,15 @@ var Settings = {
     },
 
     updateList: function () {
+        console.log('updateList')
+        var zonelist = document.getElementById('zone-list');
+        zonelist.innerHTML = '';
         var dom = '';
         for (var i = 0; i < comparetimeZones.length; i++) {
             var zone = comparetimeZones[i];
             dom += '<li class="locationItem">' + zone.name + '<a href="javascript:removeLocation(\'' + zone.name + '\')" class="delete"></a></li>'
         };
-        var zonelist = document.getElementById('zone-list');
+        
         zonelist.innerHTML = dom;
     },
 
