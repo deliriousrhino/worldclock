@@ -7,18 +7,22 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+        "cordova-plugin-datepicker": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
         },
         "cordova-plugin-wkwebview-engine": {
             "PACKAGE_NAME": "com.deliriousrhino.worldclock"
-        },
-        "cordova-plugin-datepicker": {
-            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-webserver": {
+            "PACKAGE_NAME": "com.deliriousrhino.worldclock"
+        }
+    }
 }
