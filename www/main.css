@@ -138,7 +138,7 @@ h5 {
 }
 .reset-button {
     position: fixed;
-    top: -45px;
+    bottom: -45px;
     left: -45px;
     /* border-radius: 60px; */
     -webkit-transform: rotate(45deg);
@@ -150,7 +150,7 @@ h5 {
     z-index: 400;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;/* For some Androids */
-    background: #FFFFFF url('img/reset.svg') no-repeat 60px 30px;
+    background: #FFFFFF url('img/reset.svg') no-repeat 33px 6px;
     background-size: 23px;
 }
 
@@ -159,7 +159,7 @@ h5 {
 
 .edit-button {
     position: fixed;
-    top: -45px;
+    bottom: -45px;
     right: -45px;
     /* border-radius: 60px; */
     background: #FFFFFF;
@@ -183,8 +183,8 @@ h5 {
     display: block;
     /* transform: rotate(45deg); */
     position: absolute;
-    top: 56px;
-    left: 44px;
+    top: 31px;
+    left: 15px;
     -webkit-transition: all 0.3s ease-in-out;
             transition: all 0.3s ease-in-out;
 }
@@ -193,8 +193,8 @@ h5 {
     content: '';
     display: block;
     position: absolute;
-    top: 78px;
-    left: 44px;
+    top: 53px;
+    left: 15px;
     -webkit-transition: all 0.3s ease-in-out;
             transition: all 0.3s ease-in-out;
     width: 0;
@@ -217,8 +217,8 @@ h5 {
         -ms-transform: rotate(180deg);
             transform: rotate(180deg);
     position: absolute;
-    top: 60px;
-    left: 44px;
+    top: 33px;
+    left: 18px;
 }
 
 .edit-button.close:before {
@@ -231,8 +231,8 @@ h5 {
         -ms-transform: rotate(90deg);
             transform: rotate(90deg);
     position: absolute;
-    top: 60px;
-    left: 44px;
+    top: 33px;
+    left: 18px;
     border: none;
 }
 
